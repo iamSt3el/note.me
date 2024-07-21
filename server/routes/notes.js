@@ -20,14 +20,6 @@ router.get('/get-notes', authenticateToken, async (req, res) => {
   res.json(notes);
 });
 
-router.get('/get-note:id', authenticateToken, async (req, res) => {
-  const {id} = req.params;
-  const note = await Note.findById(id);
-  if (!note) return res.status(404).json({error: 'Note not found'});
-  if (note.author.toString() !== req.userInfo.id) return res.status(403).json({error: 'Not authorized'});
-  res.json(note);
-});
-
 router.put('/update-note:id', authenticateToken, async (req, res) => {
   const {id} = req.params;
   const {title, content, noteColor} = req.body;

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import styles from "./notes.module.scss";
 import Note from "../../components/cards/note";
 import { useNotes } from "../../components/contextProvider/NotesContext";
