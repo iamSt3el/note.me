@@ -1,0 +1,26 @@
+.button {
+    display: flex;
+    width: 320px;
+    gap: 10px;
+    padding: 13px 20px;
+    margin: 25px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--white);
+    background-color: #f7685c;
+    align-items: center;
+    justify-content: center;
+
+    svg{
+      width: 24px;
+      height: 24px;
+    }
+
+    h3{
+      font-size: var(--fs-lg);
+    }
+
+    @media screen and (min-width: 1400px) {
+      width: 400px;
+    }
+  }

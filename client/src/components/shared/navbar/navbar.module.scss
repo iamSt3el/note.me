@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 6rem;
+  padding-right: 2rem;
+  align-items: center;
+  padding-top: 50px;
+  .theme {
+    svg {
+      width: 40px;
+      height: 30px;
+      align-items: center;
+      cursor: pointer;
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  //padding: 0px 12rem;
+  .header {
+    padding: 0px 2rem;
+    padding-top: 30px;
+  }
+}

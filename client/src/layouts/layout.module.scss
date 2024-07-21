@@ -1,0 +1,14 @@
+.container{
+    display: flex;
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+    //position: relative;
+    //overflow-y: auto;
+    //overflow-x: hidden;
+
+    .main{
+        width: 100%;
+
+    }
+}
