@@ -5,6 +5,7 @@ import Form from "../login/sections/form";
 import styles from "./register.module.scss";
 import { useNavigate } from "react-router-dom";
 import useMediaQuery from "../../utils/mediaQuery";
+import {API_URL} from "../../config/config"
 
 
 function Register() {
@@ -23,7 +24,7 @@ function Register() {
   };
 
   async function register() {
-    const response = await fetch("http://localhost:4000/auth/register", {
+    const response = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
