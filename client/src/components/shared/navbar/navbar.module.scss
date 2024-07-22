@@ -7,6 +7,7 @@
   align-items: center;
   padding-top: 50px;
   .theme {
+    position: relative;
     svg {
       width: 40px;
       height: 30px;
@@ -21,5 +22,11 @@
   .header {
     padding: 0px 2rem;
     padding-top: 30px;
+  }
+}
+
+@media(max-width: 500px){
+  .theme{
+    top: -14px;
   }
 }
