@@ -1,5 +1,4 @@
 const { Icon } = require("@iconify/react/dist/iconify.js");
-const { useState } = require("react");
 
 export const HoverableIcon = ({ icon, onClick, color}) => {
   
