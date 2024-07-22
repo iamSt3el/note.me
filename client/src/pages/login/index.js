@@ -3,15 +3,12 @@ import React, { useState } from "react";
 import styles from "./login.module.scss";
 import Left from "./sections/left";
 import Form from "./sections/form";
-import Loader from "../../components/shared/loader";
 import { useAuth } from "../../components/contextProvider/AuthContext";
 import useMediaQuery from "../../utils/mediaQuery";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
   const { login } = useAuth();
   const isMobile = useMediaQuery('(max-width: 768px');
 
@@ -24,7 +21,6 @@ function Login() {
   };
 
   async function handleLogin() {
-    setProgress(0);
     try {
       if (username === "" || password === "") {
         alert("Enter Credentials");
@@ -40,9 +36,6 @@ function Login() {
     }
   }
 
-  if (isLoading) {
-    return <Loader progress={progress} />;
-  }
   return (
     <main className={styles.container}>
       {!isMobile && <Left />}

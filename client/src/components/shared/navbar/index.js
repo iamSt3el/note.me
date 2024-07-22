@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import styles from "./navbar.module.scss";
 import { useTheme } from "../../../components/contextProvider/ThemeContext";
