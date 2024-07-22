@@ -6,7 +6,7 @@ const NotesContext = createContext();
 export const NotesProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
-  const [isNotesLoading, setIsNotesLoading] = useState(true)
+  const [isNotesLoading, setIsNotesLoading] = useState(true);
 
   const fetchNotes = async () => {
     try {
@@ -16,7 +16,7 @@ export const NotesProvider = ({ children }) => {
       setNotes(response.data);
     } catch (err) {
       console.error(err);
-    }finally{
+    } finally {
       setIsNotesLoading(false);
     }
   };
@@ -48,7 +48,7 @@ export const NotesProvider = ({ children }) => {
     } catch (err) {
       console.error(err);
       return null;
-    }finally{
+    } finally {
       setIsNotesLoading(false);
     }
   };
@@ -62,9 +62,7 @@ export const NotesProvider = ({ children }) => {
           withCredentials: true,
         }
       );
-      setNotes((prevNotes) =>
-        prevNotes.map((note) => (note._id === id ? response.data : note))
-      );
+      setNotes([]);
       //setSelectedNote(response.data);
       fetchNotes();
       return response.data;
@@ -76,13 +74,9 @@ export const NotesProvider = ({ children }) => {
 
   const createNote = async (newNote) => {
     try {
-      const response = await axios.post(
-        `${API_URL}/note/add-note`,
-        newNote,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`${API_URL}/note/add-note`, newNote, {
+        withCredentials: true,
+      });
       setNotes((prevNotes) => [...prevNotes, response.data]);
       setSelectedNote(response.data);
       return response.data;
@@ -104,7 +98,7 @@ export const NotesProvider = ({ children }) => {
         updateNote,
         createNote,
         fetchNotes,
-        isNotesLoading
+        isNotesLoading,
       }}
     >
       {children}
