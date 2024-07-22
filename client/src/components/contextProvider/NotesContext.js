@@ -7,10 +7,11 @@ const NotesContext = createContext();
 export const NotesProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
-  const [isNotesLoading, setIsNotesLoading] = useState(true);
+  const [isNotesLoading, setIsNotesLoading] = useState(false);
   const navigate = useNavigate();
 
   const fetchNotes = async () => {
+    setIsNotesLoading(true)
     try {
       const response = await axios.get(`${API_URL}/note/get-notes`, {
         withCredentials: true,
@@ -41,6 +42,7 @@ export const NotesProvider = ({ children }) => {
   };
 
   const getNoteById = async (id) => {
+    setIsNotesLoading(true);
     try {
       const noteFromState = notes.find((note) => note._id === id);
       if (noteFromState) {
@@ -77,6 +79,7 @@ export const NotesProvider = ({ children }) => {
   };
 
   const createNote = async (newNote) => {
+    setIsNotesLoading(true);
     try {
       const response = await axios.post(`${API_URL}/note/add-note`, newNote, {
         withCredentials: true,
@@ -87,6 +90,9 @@ export const NotesProvider = ({ children }) => {
     } catch (err) {
       console.error(err);
       return null;
+    }finally{
+      setIsNotesLoading(false);
+
     }
   };
 

@@ -24,7 +24,7 @@ function Notes() {
       note.title.toLowerCase().includes((searchText || "").toLowerCase())
   );
 
-  if (notes.length === 0 && isNotesLoading) {
+  if (notes.length === 0 && !isNotesLoading) {
     return (
       <div className={styles.empty}>
         <p>You don't have notes</p>
