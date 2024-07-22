@@ -11,7 +11,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 function FullNote() {
-  const { getNoteById} = useNotes();
+  const { selectedNote, getNoteById} = useNotes();
   const {note, setNote} = useState(null);
   const { id } = useParams();
 
