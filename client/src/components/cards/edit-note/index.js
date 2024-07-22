@@ -41,7 +41,6 @@ function EditNote() {
 
   const handleUpdate = () => {
     updateNote(id, { title, content, noteColor });
-    navigate("/");
   };
 
   const adjustTextarea = () => {

@@ -42,7 +42,7 @@ function FullNote() {
     <article className={styles.container}>
       <div
         className={styles.content}
-        style={{ backgroundColor: selectedNote.color }}
+        style={{ backgroundColor: note.color }}
       >
         <div className={styles.options}>
           <div className={styles.info}>

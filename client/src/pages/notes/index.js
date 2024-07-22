@@ -5,7 +5,7 @@ import { useNotes } from "../../components/contextProvider/NotesContext";
 import EmptyNote from "../../components/cards/empty-note";
 
 function Notes() {
-  const { notes, setNotes, deleteNote } = useNotes();
+  const { notes, setNotes, deleteNote, isNotesLoading } = useNotes();
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = (e) => {
@@ -24,7 +24,7 @@ function Notes() {
       note.title.toLowerCase().includes((searchText || "").toLowerCase())
   );
 
-  if (notes.length === 0) {
+  if (notes.length === 0 && isNotesLoading) {
     return (
       <div className={styles.empty}>
         <p>You don't have notes</p>

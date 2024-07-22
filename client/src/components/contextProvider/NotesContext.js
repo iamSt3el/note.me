@@ -1,12 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../../config/config";
+import { useNavigate } from "react-router-dom";
 const NotesContext = createContext();
 
 export const NotesProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
   const [isNotesLoading, setIsNotesLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchNotes = async () => {
     try {
@@ -64,11 +66,13 @@ export const NotesProvider = ({ children }) => {
       );
       setNotes([]);
       //setSelectedNote(response.data);
-      fetchNotes();
       return response.data;
     } catch (err) {
       console.error(err);
       return null;
+    }finally{
+      fetchNotes();
+      navigate("/");
     }
   };
 
