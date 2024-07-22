@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect, useState} from "react";
 
 import styles from "./fullnote.module.scss";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -11,18 +11,25 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 function FullNote() {
-  const { selectedNote, getNoteById} = useNotes();
+  const { getNoteById} = useNotes();
+  const {note, setNote} = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchNote = async () => {
-      await getNoteById(id);
+      setIsLoading(true);
+      try {
+        const response = await getNoteById(id);
+        setNote(response);
+      } catch (error) {
+        console.error('Error fetching note:', error);
+        // Handle error (e.g., show error message to user)
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    if (!selectedNote || selectedNote._id !== id) {
       fetchNote();
-    } else {
-    }
   }, [id, selectedNote, getNoteById]);
 
 
@@ -38,8 +45,8 @@ function FullNote() {
       >
         <div className={styles.options}>
           <div className={styles.info}>
-            <h1>{selectedNote.title}</h1>
-            <span>{formatDate(selectedNote.createdAt)}</span>
+            <h1>{note.title}</h1>
+            <span>{formatDate(note.createdAt)}</span>
           </div>
           <Link to={`/edit-note/${id}`} >
             <Icon icon={"fa-regular:edit"} />
@@ -48,7 +55,7 @@ function FullNote() {
 
         <Markdown
           remarkPlugins={[remarkGfm]}
-          children={selectedNote.content}
+          children={note.content}
           components={{
             code(props) {
               const { children, className, node, ...rest } = props;

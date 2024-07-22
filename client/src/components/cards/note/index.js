@@ -8,7 +8,7 @@ import { useNotes } from "../../contextProvider/NotesContext";
 
 function Note(props) {
   const {note} = props;
-  const { setNotes,deleteNote} = useNotes();
+  const { setNotes,deleteNote, getNoteById} = useNotes();
 
 
   const handleDeleteNode = () => {

@@ -18,17 +18,21 @@ function EditNote() {
   useEffect(() => {
     const fetchNote = async () => {
       setIsLoading(true);
-      await getNoteById(id);
+      try {
+        const response = await getNoteById(id);
+        setContent(response.content);
+        setTitle(response.title);
+        setNoteColor(response.color);
+      } catch (error) {
+        console.error('Error fetching note:', error);
+        // Handle error (e.g., show error message to user)
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    if (!selectedNote || selectedNote._id !== id) {
-      fetchNote();
-    } else {
-      setContent(selectedNote.content);
-      setTitle(selectedNote.title);
-      setNoteColor(selectedNote.color);
-      setIsLoading(false);
-    }
+    fetchNote();
+    
   }, [id, selectedNote, getNoteById]);
 
   useEffect(() => {
