@@ -17,16 +17,14 @@ function FullNote() {
 
   useEffect(() => {
     const fetchNote = async () => {
-      setIsLoading(true);
       try {
         const response = await getNoteById(id);
         setNote(response);
       } catch (error) {
         console.error('Error fetching note:', error);
         // Handle error (e.g., show error message to user)
-      } finally {
-        setIsLoading(false);
       }
+      
     };
 
       fetchNote();
