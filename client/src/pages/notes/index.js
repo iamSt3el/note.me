@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import styles from "./notes.module.scss";
 import Note from "../../components/cards/note";
 import { useNotes } from "../../components/contextProvider/NotesContext";
-
+import EmptyNote from "../../components/cards/empty-note";
 
 function Notes() {
-  const { notes,setNotes,deleteNote} = useNotes();
+  const { notes, setNotes, deleteNote } = useNotes();
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = (e) => {
@@ -13,14 +13,25 @@ function Notes() {
   };
 
   const handleDeleteNode = (id) => {
-    setNotes(prevNotes => prevNotes.filter(note => note._id !== id));
-    deleteNote(id)
-  }
+    setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
+    deleteNote(id);
+  };
 
-  const filteredNotes = notes.filter(note => 
-    note && note.title && note.title.toLowerCase().includes((searchText || "").toLowerCase())
+  const filteredNotes = notes.filter(
+    (note) =>
+      note &&
+      note.title &&
+      note.title.toLowerCase().includes((searchText || "").toLowerCase())
   );
- 
+
+  if (notes.length === 0) {
+    return (
+      <div className={styles.empty}>
+        <p>You don't have notes</p>
+        <EmptyNote/>
+      </div>
+    );
+  }
 
   return (
     <section className={styles.container}>
@@ -40,11 +51,7 @@ function Notes() {
       </header>
       <main>
         {filteredNotes.map((note) => (
-          <Note
-            key={note._id}
-            note={note}
-            deleteNote={handleDeleteNode}
-          />
+          <Note key={note._id} note={note} deleteNote={handleDeleteNode} />
         ))}
       </main>
     </section>

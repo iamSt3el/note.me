@@ -15,6 +15,10 @@ function EditNote() {
   const navigate = useNavigate();
 
   const addnote =  () => {
+    if(title === ""){
+      alert("Enter Title ")
+      return;
+    }
     createNote({title, content, noteColor})
     navigate("/")
   };

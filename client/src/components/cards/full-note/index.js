@@ -11,8 +11,9 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 function FullNote() {
+  const [isLoading, setIsLoading] = useState(true);
   const { selectedNote, getNoteById} = useNotes();
-  const {note, setNote} = useState(null);
+  const [note, setNote] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -23,15 +24,17 @@ function FullNote() {
       } catch (error) {
         console.error('Error fetching note:', error);
         // Handle error (e.g., show error message to user)
+      }finally{
+        setIsLoading(false);
       }
       
     };
 
       fetchNote();
-  }, [id, selectedNote, getNoteById]);
+  }, [id, selectedNote, getNoteById, setNote]);
 
 
-  if (!selectedNote) {
+  if (isLoading) {
     return <div></div>;
   }
 

@@ -1,3 +1,27 @@
+.empty{
+  padding-left: 6rem;
+  padding-top: 6rem;
+  display: flex;
+  flex-direction: column;
+  //justify-content: center;
+  gap: 20px;
+
+
+  p{
+    font-size: 2rem;
+  }
+  span{
+    padding-left: 3rem;
+  }
+  .icon{
+    width: 30%;
+    display: flex;
+    justify-content: center;
+  }
+  
+
+}
+
 .container {
   display: flex;
   height: 100%;
@@ -100,5 +124,18 @@
     main {
       margin-bottom: 40px;
     }
+  }
+
+  .empty{
+    padding-left: 3rem;
+    padding-top: 6rem;
+  
+    p, span{
+      font-size: var(--fs-xxl);
+    }
+    span{
+      padding-left: 3rem;
+    }
+  
   }
 }
