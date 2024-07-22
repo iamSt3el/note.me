@@ -7,6 +7,12 @@
   grid-template-rows: auto 30px 25px;
   background-color: rgb(251, 235, 149, 0.4);
   
+  .info{
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    
+  }
 
   p {
     font-size: var(--fs-md);

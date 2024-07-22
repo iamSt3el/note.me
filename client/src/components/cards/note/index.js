@@ -20,8 +20,16 @@ function Note(props) {
  
   return (
     <article className={styles.container} style={{ backgroundColor: note.color }}>
-      <div className={styles.content}>
+       <div className={styles.info}>
         <h1>{note.title}</h1>
+        <div className={styles.content}>
+          <p>
+            {note.content.length > 150
+              ? note.content.slice(0, 150).split(" ").slice(0, -1).join(" ") +
+                "..."
+              : note.content}
+          </p>{" "}
+        </div>
       </div>
       <div className={styles.readme}>
         <Link to={`/full-note/${note._id}`} state={{ color: note.color }}>
