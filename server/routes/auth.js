@@ -2,9 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
 const router = express.Router();
-
 const salt = bcrypt.genSaltSync(10);
 const secret = process.env.JWT_SECRET;
 
@@ -29,7 +27,6 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ error: "User not found" });
     }
     const passOk = bcrypt.compareSync(password, userDoc.password);
-
     if (passOk) {
       jwt.sign(
         { username, id: userDoc._id },
@@ -37,18 +34,12 @@ router.post("/login", async (req, res) => {
         { expiresIn: "1d" },
         (err, token) => {
           if (err) throw err;
-          res
-            .cookie("token", token, {
-              httpOnly: true,
-
-             secure: false,
-              sameSite: "lax",
-              maxAge: 24 * 60 * 60 * 1000, // 1 day
-            })
-            .json({
-              id: userDoc._id,
-              username,
-            });
+          // Instead of setting a cookie, return the token in the response
+          res.json({
+            id: userDoc._id,
+            username,
+            token: token // Return the token in the response body
+          });
         }
       );
     } else {
@@ -61,19 +52,20 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none"
-  }).json({ message: "Logged out successfully" });
+  // Client will handle clearing the token from localStorage
+  res.json({ message: "Logged out successfully" });
 });
 
 router.get("/verify", (req, res) => {
-  const token = req.cookies.token;
-  if (!token) {
+  // Get token from Authorization header instead of cookies
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: "No token provided" });
   }
-
+  
+  const token = authHeader.split(' ')[1];
+  
   jwt.verify(token, secret, (err, decoded) => {
     if (err) {
       return res.status(401).json({ error: "Invalid token" });

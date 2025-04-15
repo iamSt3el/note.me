@@ -2,6 +2,8 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../../config/config";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext"; // Import useAuth
+
 const NotesContext = createContext();
 
 export const NotesProvider = ({ children }) => {
@@ -9,13 +11,13 @@ export const NotesProvider = ({ children }) => {
   const [selectedNote, setSelectedNote] = useState(null);
   const [isNotesLoading, setIsNotesLoading] = useState(false);
   const navigate = useNavigate();
-
+  const { isAuthenticated } = useAuth(); // Get authentication status
+  
   const fetchNotes = async () => {
-    setIsNotesLoading(true)
+    setIsNotesLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/note/get-notes`, {
-        withCredentials: true,
-      });
+      // Authorization header will be added by the axios interceptor
+      const response = await axios.get(`${API_URL}/note/get-notes`);
       setNotes(response.data);
     } catch (err) {
       console.error(err);
@@ -23,15 +25,20 @@ export const NotesProvider = ({ children }) => {
       setIsNotesLoading(false);
     }
   };
+  
+  // Only fetch notes when authenticated
   useEffect(() => {
-    fetchNotes();
-  }, []);
-
+    if (isAuthenticated) {
+      fetchNotes();
+    } else {
+      setNotes([]);
+    }
+  }, [isAuthenticated]);
+  
   const deleteNote = async (id) => {
     try {
-      await axios.delete(`${API_URL}/note/delete-note${id}`, {
-        withCredentials: true,
-      });
+      // Authorization header will be added by the axios interceptor
+      await axios.delete(`${API_URL}/note/delete-note${id}`);
       setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
       if (selectedNote && selectedNote._id === id) {
         setSelectedNote(null);
@@ -40,7 +47,7 @@ export const NotesProvider = ({ children }) => {
       console.error(err);
     }
   };
-
+  
   const getNoteById = async (id) => {
     setIsNotesLoading(true);
     try {
@@ -56,15 +63,13 @@ export const NotesProvider = ({ children }) => {
       setIsNotesLoading(false);
     }
   };
-
+  
   const updateNote = async (id, updatedNote) => {
     try {
+      // Authorization header will be added by the axios interceptor
       const response = await axios.put(
         `${API_URL}/note/update-note${id}`,
-        updatedNote,
-        {
-          withCredentials: true,
-        }
+        updatedNote
       );
       setNotes([]);
       //setSelectedNote(response.data);
@@ -72,30 +77,28 @@ export const NotesProvider = ({ children }) => {
     } catch (err) {
       console.error(err);
       return null;
-    }finally{
+    } finally {
       fetchNotes();
       navigate("/");
     }
   };
-
+  
   const createNote = async (newNote) => {
     setIsNotesLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/note/add-note`, newNote, {
-        withCredentials: true,
-      });
+      // Authorization header will be added by the axios interceptor
+      const response = await axios.post(`${API_URL}/note/add-note`, newNote);
       setNotes((prevNotes) => [...prevNotes, response.data]);
       setSelectedNote(response.data);
       return response.data;
     } catch (err) {
       console.error(err);
       return null;
-    }finally{
+    } finally {
       setIsNotesLoading(false);
-
     }
   };
-
+  
   return (
     <NotesContext.Provider
       value={{

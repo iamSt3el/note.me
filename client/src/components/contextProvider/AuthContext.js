@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-
-import {API_URL} from "../../config/config"
+import axios from "axios";
+import { API_URL } from "../../config/config";
 
 const AuthContext = createContext(null);
 
@@ -9,24 +9,55 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Configure axios defaults
   useEffect(() => {
+    // Set up axios interceptor to add token to all requests
+    axios.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+    
     checkAuthStatus();
   }, []);
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch(`${API_URL}/auth/verify`, {
-        credentials: "include",
+      // Get token from localStorage
+      const token = localStorage.getItem("token");
+      
+      if (!token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+      
+      // Send request with Authorization header
+      const response = await axios.get(`${API_URL}/auth/verify`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
+      
+      if (response.status === 200) {
+        setUser(response.data);
         setIsAuthenticated(true);
       } else {
+        // Clear invalid token
+        localStorage.removeItem("token");
         setIsAuthenticated(false);
       }
     } catch (error) {
       console.error("Auth check failed:", error);
+      // Clear invalid token
+      localStorage.removeItem("token");
       setIsAuthenticated(false);
     } finally {
       setLoading(false);
@@ -34,59 +65,58 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (username, password) => {
-    console.log(API_URL)
     try {
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-        credentials: "include",
-      });
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-        setIsAuthenticated(true);
-        return { success: true };
-      } else {
-        const errorData = await response.json();
-        return { success: false, error: errorData.error };
-      }
+      const response = await axios.post(
+        `${API_URL}/auth/register`,
+        { username, password },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+      
+      return { success: true };
     } catch (error) {
       console.error("Registration failed:", error);
-      return { success: false, error: "An error occurred during registration" };
+      return { 
+        success: false, 
+        error: error.response?.data?.error || "An error occurred during registration" 
+      };
     }
   };
 
   const login = async (username, password) => {
-    console.log(API_URL)
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-        credentials: "include",
+      const response = await axios.post(
+        `${API_URL}/auth/login`,
+        { username, password },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+      
+      // Save token to localStorage
+      localStorage.setItem("token", response.data.token);
+      
+      setUser({
+        id: response.data.id,
+        username: response.data.username
       });
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-        setIsAuthenticated(true);
-        return { success: true };
-      } else {
-        const errorData = await response.json();
-        return { success: false, error: errorData.error };
-      }
+      setIsAuthenticated(true);
+      
+      return { success: true };
     } catch (error) {
       console.error("Login failed:", error);
-      return { success: false, error: "An error occurred during login" };
+      return { 
+        success: false, 
+        error: error.response?.data?.error || "An error occurred during login" 
+      };
     }
   };
 
   const logout = async () => {
     try {
-      await fetch(`${API_URL}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
+      // Clear token from localStorage
+      localStorage.removeItem("token");
       setUser(null);
       setIsAuthenticated(false);
     } catch (error) {
