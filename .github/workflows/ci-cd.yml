@@ -45,7 +45,7 @@ jobs:
             export MONGODB_URI='${{ secrets.MONGODB_URI }}'
             export JWT_SECRET='${{ secrets.JWT_SECRET }}'
             
-            # Create docker-compose file
+            # Create docker-compose file (without Prometheus and Grafana)
             cat > docker-compose.prod.yml << EOL
             version: '3'
             services:
@@ -67,20 +67,6 @@ jobs:
                 ports:
                   - "5000:5000"
                 restart: always
-              prometheus:
-                image: prom/prometheus:latest
-                volumes:
-                  - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-                ports:
-                  - "9090:9090"
-                restart: always
-              grafana:
-                image: grafana/grafana:latest
-                ports:
-                  - "3001:3000"
-                restart: always
-                depends_on:
-                  - prometheus
             EOL
             
             # Pull latest images
