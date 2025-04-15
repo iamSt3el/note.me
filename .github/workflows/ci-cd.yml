@@ -45,10 +45,10 @@ jobs:
             
             # Create environment variable files
             echo "REACT_APP_API_URL=http://${{ secrets.EC2_HOST }}:5000" > ./client/.env
-            echo "PORT=5000" > ./server/.env
-            echo "MONGO_URI=mongodb+srv://himanshudhaka9166:I5eH1eqf4S9YFima@cluster1.ama8ond.mongodb.net" >> ./server/.env
-            echo "CORS_ORIGIN=http://${{ secrets.EC2_HOST }}:3000" >> ./server/.env
-            echo "NODE_ENV=production" >> ./server/.env
+            echo "PORT=5000" > ./.env
+            echo "MONGO_URI=mongodb+srv://himanshudhaka9166:I5eH1eqf4S9YFima@cluster1.ama8ond.mongodb.net" >> ./.env
+            echo "CORS_ORIGIN=http://${{ secrets.EC2_HOST }}:3000" >> ./.env
+            echo "NODE_ENV=production" >> ./.env
             
             # Create a docker-compose file directly with the correct username
             cat > docker-compose.prod.yml << 'EOL'
