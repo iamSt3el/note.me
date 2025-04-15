@@ -68,6 +68,7 @@ jobs:
                   - CORS_ORIGIN=http://${{ secrets.EC2_HOST }}:3000
                   - JWT_SECRET=asdfadf22k23h4kj2h4kh223
                   - NODE_ENV=production
+                  - REACT_APP_API_URL=http://${{ secrets.EC2_HOST }}:5000
                 ports:
                   - "5000:5000"
                 restart: always
