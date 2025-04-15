@@ -1,30 +1,28 @@
 name: CI/CD Pipeline
-
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
+      
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
+      
       - name: Build and push client image
         uses: docker/build-push-action@v4
         with:
           context: ./client
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/noteme-client:latest
-
+      
       - name: Build and push server image
         uses: docker/build-push-action@v4
         with:
@@ -32,7 +30,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/noteme-server:latest
-
+      
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -43,15 +41,17 @@ jobs:
             cd ~/note.me
             git pull
             
-            # Create environment variable files
+            # Create client environment variable file
             echo "REACT_APP_API_URL=http://${{ secrets.EC2_HOST }}:5000" > ./client/.env
+            
+            # Create server env file in the root folder
             echo "PORT=5000" > ./.env
             echo "MONGO_URI=mongodb+srv://himanshudhaka9166:I5eH1eqf4S9YFima@cluster1.ama8ond.mongodb.net" >> ./.env
             echo "CORS_ORIGIN=http://${{ secrets.EC2_HOST }}:3000" >> ./.env
             echo "NODE_ENV=production" >> ./.env
             
             # Create a docker-compose file directly with the correct username
-            cat > docker-compose.prod.yml << 'EOL'
+            cat > docker-compose.prod.yml << EOL
             version: '3'
             
             services:
@@ -67,7 +67,7 @@ jobs:
                   - "5000:5000"
                 restart: always
                 env_file:
-                  - ./server/.env
+                  - ./.env
                 depends_on:
                   - mongo
             
