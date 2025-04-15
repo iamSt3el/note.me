@@ -1,23 +1,26 @@
 version: '3'
-
 services:
   client:
-    image: st3el/noteme-client:latest
+    image: ${{ secrets.DOCKERHUB_USERNAME }}/noteme-client:latest
+    environment:
+      - REACT_APP_API_URL=http://${{ secrets.EC2_HOST }}:5000
     ports:
       - "3000:80"
     restart: always
-
+  
   server:
-    image: st3el/noteme-server:latest
+    image: ${{ secrets.DOCKERHUB_USERNAME }}/noteme-server:latest
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb+srv://himanshudhaka9166:I5eH1eqf4S9YFima@cluster1.ama8ond.mongodb.net
+      - CORS_ORIGIN=http://${{ secrets.EC2_HOST }}:3000
+      - JWT_SECRET=asdfadf22k23h4kj2h4kh223
+      - NODE_ENV=production
+      - REACT_APP_API_URL=http://${{ secrets.EC2_HOST }}:5000
     ports:
       - "5000:5000"
     restart: always
-    environment:
-      - PORT=5000
-      - MONGO_URI=mongodb+srv://himanshudhaka9166:I5eH1eqf4S9YFima@cluster1.ama8ond.mongodb.net
-      - CORS_ORIGIN=http://3.110.247.47:3000
-      - NODE_ENV=production
-
+  
   prometheus:
     image: prom/prometheus:latest
     volumes:
@@ -25,7 +28,7 @@ services:
     ports:
       - "9090:9090"
     restart: always
-
+  
   grafana:
     image: grafana/grafana:latest
     ports:
