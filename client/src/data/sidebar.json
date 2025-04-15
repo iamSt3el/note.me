@@ -1,0 +1,14 @@
+[
+    {
+        "title":"Home",
+        "icon": "ic:outline-home",
+        "path":"/"
+
+    },
+    {
+        "title":"Add Notes",
+        "icon": "ic:round-add",
+        "path":"/create-note"
+
+    }
+]

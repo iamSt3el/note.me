@@ -1,0 +1,22 @@
+.colorPickerContainer {
+  position: relative;
+  align-items: center;
+
+  svg{
+    color: #EF5A6F;
+  }
+
+  .colorPicker{
+    position: absolute;
+    width: 250px;
+    right: 0px;
+  }
+}
+
+@media (max-width: 700px) {
+  .colorPicker{
+    width: 150px;
+    left: 0;
+  }
+
+}

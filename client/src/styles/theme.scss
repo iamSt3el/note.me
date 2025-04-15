@@ -1,0 +1,49 @@
+:root{
+    //Font: Sizes
+    --fs-sm:14px;
+    --fs-md:16px;
+    --fs-lg:18px;
+    --fs-xl:22px;
+    --fs-xxl:24px;
+    --fs-brand:48px;
+
+    //Font: Weight
+    --fw-light:400;
+    --fw-normal:500;
+    --fw-medium:550;
+    --fw-bold:600;
+
+    //Border Radius
+    --br-sm:5px;
+
+    //Colors
+    --grey:#808080;
+    --light-grey:#a8a8b3;
+    --black: #3C3D43;
+    --white:#FFFFFF;
+    --rose:#FDBAA3;
+    --red:#f7685c;
+    --green:#30c58d;
+    --cream:#fffdfa;
+    --cream-light: rgb(253, 186, 163, 40%);
+
+    --rad: .7rem;
+  --dur: .3s;
+  --color-dark: #1C2321;
+  --color-light: #fff;
+  --color-brand: #57bd84;
+  --font-fam: 'Lato', sans-serif;
+  --height: 3rem;
+  --btn-width: 6rem;
+  --bez: cubic-bezier(0, 0, 0.43, 1.49);
+}
+
+.light{
+    background-color: #EFF1F3;
+    color: var(--black);
+}
+
+.dark{
+    background-color:#45474B;
+    //color: var(--white);
+}

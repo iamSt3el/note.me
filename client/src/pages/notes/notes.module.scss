@@ -1,0 +1,141 @@
+.empty{
+  padding-left: 6rem;
+  padding-top: 6rem;
+  display: flex;
+  flex-direction: column;
+  //justify-content: center;
+  gap: 20px;
+
+
+  p{
+    font-size: 2rem;
+  }
+  span{
+    padding-left: 3rem;
+  }
+  .icon{
+    width: 30%;
+    display: flex;
+    justify-content: center;
+  }
+  
+
+}
+
+.container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding-left: 6rem;
+  padding-right: 2rem;
+  flex-direction: column;
+
+  header {
+    padding-top: 40px;
+
+    form {
+      position: relative;
+      background-color: var(--color-brand);
+      border-radius: var(--rad);
+
+      input,
+      button {
+        height: var(--height);
+        font-family: var(--font-fam);
+        border: 0;
+        color: var(--color-dark);
+        font-size: 1rem;
+      }
+      input[type="search"] {
+        outline: 0;
+        width: 100%;
+        background: var(--color-light);
+        padding: 0 1rem;
+        border-radius: var(--rad);
+        appearance: none;
+        transition: all var(--dur) var(--bez);
+        transition-property: width, border-radius;
+        z-index: 1;
+        position: relative;
+      }
+      button {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: var(--btn-width);
+        font-weight: bold;
+        background: var(--color-brand);
+        border-radius: 0 var(--rad) var(--rad) 0;
+      }
+      input:not(:placeholder-shown) {
+        border-radius: var(--rad) 0 0 var(--rad);
+        width: calc(100% - var(--btn-width));
+        + button {
+          display: block;
+        }
+      }
+    }
+  }
+  svg {
+    width: 25px;
+    height: 30px;
+    cursor: pointer;
+  }
+
+  main {
+    display: grid;
+    gap: 20px;
+    padding-top: 40px;
+    margin-bottom: 40px;
+    //grid-template-columns: repeat(4, 300px);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  @media (max-width: 1200px) {
+    main {
+      //grid-template-columns: repeat(3, 300px);
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    main {
+      //grid-template-columns: repeat(2, 300px);
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+      gap: 30px;
+    }
+  }
+
+  @media (max-width: 450px) {
+    main {
+      //grid-template-columns: repeat(1, 280px);
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 2rem;
+    main {
+      margin-bottom: 40px;
+    }
+  }
+
+  .empty{
+    padding-left: 3rem;
+    padding-top: 6rem;
+  
+    p, span{
+      font-size: var(--fs-xxl);
+    }
+    span{
+      padding-left: 3rem;
+    }
+  
+  }
+}
