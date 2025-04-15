@@ -15,14 +15,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          
+      
       - name: Build and push client image
         uses: docker/build-push-action@v4
         with:
           context: ./client
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/noteme-client:latest
-          
+      
       - name: Build and push server image
         uses: docker/build-push-action@v4
         with:
@@ -30,7 +30,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/noteme-server:latest
-          
+      
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -41,34 +41,32 @@ jobs:
             cd ~/note.me
             git pull
             
-            # Create server .env file
-            echo "PORT=5000" > ./.env
-            echo "MONGODB_URI=mongodb+srv://himanshudhaka9166:I5eH1eqf4S9YFima@cluster1.ama8ond.mongodb.net" >> ./.env
-            echo "CORS_ORIGIN=http://${{ secrets.EC2_HOST }}:3000" >> ./.env
-            echo "JWT_SECRET=asdfadf22k23h4kj2h4kh223" >> ./.env
-            echo "NODE_ENV=production" >> ./.env
-            echo "REACT_APP_API_URL=http://${{ secrets.EC2_HOST }}:5000" >> ./.env
+            # Export environment variables for docker-compose
+            export MONGODB_URI='${{ secrets.MONGODB_URI }}'
+            export JWT_SECRET='${{ secrets.JWT_SECRET }}'
             
-            # Create a docker-compose file that passes environment variables directly
+            # Create docker-compose file
             cat > docker-compose.prod.yml << EOL
             version: '3'
             services:
               client:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/noteme-client:latest
                 environment:
-                  env_file: ./.env
+                  - REACT_APP_API_URL=http://${{ secrets.EC2_HOST }}:5000
                 ports:
                   - "3000:80"
                 restart: always
-              
               server:
                 image: ${{ secrets.DOCKERHUB_USERNAME }}/noteme-server:latest
                 environment:
-                  env_file: ./.env
+                  - PORT=5000
+                  - MONGODB_URI=\${MONGODB_URI}
+                  - CORS_ORIGIN=http://${{ secrets.EC2_HOST }}:3000
+                  - JWT_SECRET=\${JWT_SECRET}
+                  - NODE_ENV=production
                 ports:
                   - "5000:5000"
                 restart: always
-              
               prometheus:
                 image: prom/prometheus:latest
                 volumes:
@@ -76,7 +74,6 @@ jobs:
                 ports:
                   - "9090:9090"
                 restart: always
-              
               grafana:
                 image: grafana/grafana:latest
                 ports:
@@ -89,6 +86,6 @@ jobs:
             # Pull latest images
             docker-compose -f docker-compose.prod.yml pull
             
-            # Restart the containers
+            # Restart the containers with environment variables passed from shell
             docker-compose -f docker-compose.prod.yml down
             docker-compose -f docker-compose.prod.yml up -d
