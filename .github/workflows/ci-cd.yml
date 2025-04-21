@@ -45,7 +45,7 @@ jobs:
             export MONGODB_URI='${{ secrets.MONGODB_URI }}'
             export JWT_SECRET='${{ secrets.JWT_SECRET }}'
             
-            # Create docker-compose file (without Prometheus and Grafana)
+            # Create docker-compose file 
             cat > docker-compose.prod.yml << EOL
             version: '3'
             services:
