@@ -5,7 +5,7 @@ variable "aws_region" {
 
 variable "ami_id" {
   description = "AMI ID for Amazon Linux 2"
-  default     = "ami-002f6e91abff6eb96"  # Amazon Linux 2 in us-east-1, update as needed
+  default     = "ami-002f6e91abff6eb96"  
 }
 
 variable "instance_type" {
@@ -15,7 +15,7 @@ variable "instance_type" {
 
 variable "key_name" {
   description = "EC2 key pair name"
-  default     = "noteme-key"  # Create this key pair in AWS console first
+  default     = "noteme-key" 
 }
 
 variable "project_name" {

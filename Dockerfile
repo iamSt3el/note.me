@@ -1,16 +1,15 @@
 FROM node:18
 
- WORKDIR /app
+WORKDIR /app
 
+COPY package*.json ./
 
- COPY package*.json ./
- RUN npm install
+RUN npm install
 
- COPY server/ ./server/
- COPY server.js ./
+COPY server/ ./server/
 
+COPY server.js ./
 
- EXPOSE 5000
+EXPOSE 5000
 
-
- CMD ["node", "server.js"]
+CMD ["node", "server.js"]
