@@ -2,6 +2,11 @@
 
 A full-stack note-taking application built with React and Node.js, featuring user authentication and real-time note management.
 
+## Screenshots
+
+![Home Page](./screenshots/2025-10-01T10:44:58,016890876+05:30.png)
+![Notes Dashboard](./screenshots/2025-10-01T10:45:37,741209860+05:30.png)
+
 ## Features
 
 - User authentication with JWT
